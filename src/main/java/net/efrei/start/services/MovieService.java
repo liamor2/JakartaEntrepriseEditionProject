@@ -57,4 +57,51 @@ public class MovieService {
       throw new IllegalArgumentException("Movie with title " + createMovie.getTitle() + " already exists");
     }
   }
+
+  public void update(String id, CreateMovie createMovie) {
+    Movie existingMovie = movieRepository.findById(id).orElse(null);
+    if (existingMovie != null) {
+      updateExistingMovie(existingMovie, createMovie);
+      movieRepository.save(existingMovie);
+    } else {
+      throw new IllegalArgumentException("Movie with id " + id + " not found");
+    }
+  }
+
+  private void updateExistingMovie(Movie existing, CreateMovie updates) {
+    if (updates.getTitle() != null) {
+      existing.setTitle(updates.getTitle());
+    }
+    if (updates.getYear() != 0) {
+      existing.setYear(updates.getYear());
+    }
+    if (updates.getDirectorID() != null) {
+      Director director = directorService.findById(updates.getDirectorID());
+      if (director != null) {
+        existing.setDirector(director);
+      }
+    }
+    if (updates.getActorsIDs() != null) {
+      Set<Actor> actors = new HashSet<>();
+      for (String actorId : updates.getActorsIDs()) {
+        Actor actor = actorService.findById(actorId);
+        if (actor != null) {
+          actors.add(actor);
+        }
+      }
+      existing.setActors(actors);
+    }
+    if (updates.getGenre() != null) {
+      existing.setTheme(Theme.valueOf(updates.getGenre().toUpperCase()));
+    }
+  }
+
+  public void delete(String id) {
+    Movie movie = movieRepository.findById(id).orElse(null);
+    if (movie != null) {
+      movieRepository.delete(movie);
+    } else {
+      throw new IllegalArgumentException("Movie with id " + id + " not found");
+    }
+  }
 }

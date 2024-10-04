@@ -7,22 +7,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import net.efrei.start.dto.CreatePerson;
 import net.efrei.start.models.Person;
 import net.efrei.start.services.PersonService;
 
-public abstract class PersonController<T extends Person> {
+public abstract class PersonController<P extends Person> {
 
     @Autowired
-    private final PersonService<T> personService;
+    private final PersonService<P> personService;
 
-    public PersonController(PersonService<T> service) {
+    public PersonController(PersonService<P> service) {
         this.personService = service;
     }
 
     @GetMapping
-    public ResponseEntity<List<T>> findAll() {
+    public ResponseEntity<List<P>> findAll() {
         try {
-            List<T> people = personService.findAll();
+            List<P> people = personService.findAll();
             return new ResponseEntity<>(people, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -30,9 +31,9 @@ public abstract class PersonController<T extends Person> {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<T> findById(@PathVariable String id) {
+    public ResponseEntity<P> findById(@PathVariable String id) {
         try {
-            T person = personService.findById(id);
+            P person = personService.findById(id);
             return person != null ? new ResponseEntity<>(person, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,7 +41,7 @@ public abstract class PersonController<T extends Person> {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody T person) {
+    public ResponseEntity<?> create(@RequestBody CreatePerson person) {
         try {
             personService.create(person);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -50,7 +51,7 @@ public abstract class PersonController<T extends Person> {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable String id, @RequestBody T person) {
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody CreatePerson person) {
         try {
             personService.update(id, person);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -60,7 +61,7 @@ public abstract class PersonController<T extends Person> {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> partialUpdate(@PathVariable String id, @RequestBody T person) {
+    public ResponseEntity<?> patch(@PathVariable String id, @RequestBody CreatePerson person) {
         try {
             personService.update(id, person);
             return new ResponseEntity<>(HttpStatus.OK);

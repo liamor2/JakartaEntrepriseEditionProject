@@ -3,7 +3,7 @@ package net.efrei.start.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import net.efrei.start.global.Countries;
+import net.efrei.start.global.Country;
 
 @MappedSuperclass
 public abstract class Person {
@@ -21,12 +21,12 @@ public abstract class Person {
     private int age;
 
     @Enumerated(EnumType.STRING)
-    private Countries country;
+    private Country country;
 
     // Constructors
     public Person() {}
 
-    public Person(@NotBlank String name, @NotBlank String firstname, @Min(0) int age, Countries country) {
+    public Person(@NotBlank String name, @NotBlank String firstname, @Min(0) int age, Country country) {
         this.name = name;
         this.firstname = firstname;
         this.age = age;
@@ -50,7 +50,7 @@ public abstract class Person {
         return age;
     }
 
-    public Countries getCountry() {
+    public Country getCountry() {
         return country;
     }
 
@@ -72,7 +72,7 @@ public abstract class Person {
         this.age = age;
     }
 
-    public void setCountry(Countries country) {
+    public void setCountry(Country country) {
         this.country = country;
     }
 }

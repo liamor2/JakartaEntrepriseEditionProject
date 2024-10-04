@@ -1,6 +1,6 @@
 package net.efrei.start.global;
 
-public enum Countries {
+public enum Country {
   USA,
   CANADA,
   MEXICO,

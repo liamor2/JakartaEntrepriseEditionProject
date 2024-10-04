@@ -1,6 +1,6 @@
 package net.efrei.start.dto;
 
-public abstract class CreatePerson {
+public class CreatePerson {
   
   private String name;
   private String firstname;

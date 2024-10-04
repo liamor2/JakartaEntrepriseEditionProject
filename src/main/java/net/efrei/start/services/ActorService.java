@@ -17,4 +17,9 @@ public class ActorService extends PersonService<Actor> {
     protected String getPersonType() {
         return "Actor";
     }
+
+    @Override
+    protected Actor createNewPersonInstance() {
+        return new Actor();
+    }
 }

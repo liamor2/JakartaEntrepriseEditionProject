@@ -17,4 +17,11 @@ public class DirectorService extends PersonService<Director> {
     protected String getPersonType() {
         return "Director";
     }
+
+    @Override
+    protected Director createNewPersonInstance() {
+        return new Director();
+    }
+
+    
 }

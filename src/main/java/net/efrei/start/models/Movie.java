@@ -1,8 +1,9 @@
 package net.efrei.start.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -12,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -22,22 +24,24 @@ import net.efrei.start.global.Theme;
 import java.util.Set;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Movie {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private String id;
   private String title;
   private int year;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "director_id")
-  @JsonBackReference
   private Director director;
 
-  @ManyToMany(mappedBy = "movies")
-  @JsonManagedReference
+  @ManyToMany(mappedBy = "movies", cascade = CascadeType.ALL)
   private Set<Actor> actors;
+
+  @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+  private Set<Review> reviews;
 
   @Enumerated(EnumType.STRING)
   private Theme theme;
@@ -53,11 +57,11 @@ public class Movie {
 
   // Getters and setters
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -99,5 +103,13 @@ public class Movie {
 
   public void setTheme(Theme theme) {
     this.theme = theme;
+  }
+
+  public Set<Review> getReviews() {
+    return reviews;
+  }
+
+  public void setReviews(Set<Review> reviews) {
+    this.reviews = reviews;
   }
 }
